@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Model representation of Account Data.
+ */
 @Entity
 @Table(name = "tb_account")
 @Getter
@@ -22,8 +25,8 @@ import javax.persistence.Table;
 public class AccountData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "account_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id")
     private Long id;
 
     @Column(name = "account_document", nullable = false)

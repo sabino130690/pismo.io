@@ -10,7 +10,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
@@ -31,10 +33,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.pismo.io.evaluation.exceptions.enums.ErrorCodeEnum.TRNS400001;
-import static com.pismo.io.evaluation.exceptions.enums.ErrorCodeEnum.TRNS500001;
 import static java.util.stream.Collectors.groupingBy;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /**
  * Handler for all exceptions expected in this application.
@@ -45,18 +45,28 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class CustomExceptionHandler {
     private final MessageSource messageSource;
 
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<ExceptionResponse> handleGenericException(
-            final Exception e, final HttpServletRequest request) {
-
-        return this.getExceptionResponse(INTERNAL_SERVER_ERROR, request, TRNS500001, null, true);
-    }
-
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<ExceptionResponse> handleConstraintViolationException(
             final ConstraintViolationException e, final HttpServletRequest request) {
 
         final var fields = this.generateFields(e.getConstraintViolations());
+        return this.getExceptionResponse(BAD_REQUEST, request, TRNS400001, fields, true);
+    }
+
+    @ExceptionHandler({HttpMessageNotReadableException.class})
+    public ResponseEntity<ExceptionResponse> handleHttpMessageNotReadableException(
+            final HttpMessageNotReadableException e, final HttpServletRequest request) {
+
+        Map<String, List<String>> fieldErros = new HashMap<>();
+        fieldErros.put(e.getMessage(), List.of(this.messageSource.getMessage(e.getMessage(), null, e.getMessage(), Locale.getDefault())));
+        return this.getExceptionResponse(BAD_REQUEST, request, TRNS400001, fieldErros, true);
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(
+            final MethodArgumentNotValidException e, final HttpServletRequest request) {
+
+        final var fields = this.generateFields(e.getFieldErrors());
         return this.getExceptionResponse(BAD_REQUEST, request, TRNS400001, fields, true);
     }
 

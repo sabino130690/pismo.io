@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * Entity representation of account information.
+ */
 @Getter
 @AllArgsConstructor
 @Builder(toBuilder = true)

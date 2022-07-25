@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * Implementation of all connections with database to return Account entity
+ * Implementation of all connections with database to return Account information
  */
 @Slf4j
 @Service
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class AccountDatabaseProvider implements DatabaseProvider<Account, Long> {
 
     private final AccountRepository accountRepository;
+
 
     @Override
     public Account findById(final Long id) {
@@ -27,12 +28,32 @@ public class AccountDatabaseProvider implements DatabaseProvider<Account, Long> 
 
             return new AccountNotFoundException();
         });
-
+        log.info("Account found");
         return accountData.toEntity();
     }
 
+    /**
+     * Method will convert domain database into entity to realize
+     *
+     * @param document collection identifier
+     * @return entity
+     */
+    public Account findByDocument(final String document) {
+        final AccountData accountData = accountRepository.findByDocument(document).orElseThrow(() -> {
+
+            log.info("Account not found by document");
+
+            return new AccountNotFoundException();
+        });
+        log.info("Account found");
+        return accountData.toEntity();
+    }
+
+
     @Override
     public Account save(final Account account) {
+
+        log.info("Saving account");
         return accountRepository.save(AccountDatabaseConverter.toDatabase(account)).toEntity();
     }
 

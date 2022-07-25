@@ -1,8 +1,13 @@
 package com.pismo.io.evaluation.controller;
 
 import com.pismo.io.evaluation.controller.converter.AccountConverter;
+import com.pismo.io.evaluation.controller.converter.TransactionConverter;
 import com.pismo.io.evaluation.controller.dto.common.ExceptionResponse;
+import com.pismo.io.evaluation.controller.dto.request.AccountRequest;
+import com.pismo.io.evaluation.controller.dto.request.TransactionRequest;
 import com.pismo.io.evaluation.controller.dto.response.AccountResponse;
+import com.pismo.io.evaluation.controller.dto.response.TransactionResponse;
+import com.pismo.io.evaluation.usecase.CreateAccount;
 import com.pismo.io.evaluation.usecase.FindAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,19 +21,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
-@Validated
+import javax.validation.Valid;
+
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/evaluation/accounts")
+@RequiredArgsConstructor
 @Tag(name = "Account", description = "Account V1")
+@Validated
 public class AccountController {
 
     private final FindAccount findAccount;
+
+    private final CreateAccount createAccount;
 
     @GetMapping("/{accountId}")
     @ResponseStatus(HttpStatus.OK)
@@ -48,10 +58,39 @@ public class AccountController {
                                     schema = @Schema(implementation = ExceptionResponse.class)))
             })
     public ResponseEntity<AccountResponse> findAccount(@PathVariable final Long accountId) {
-        log.info("Receiving find account request");
+
         final var accountResponse = findAccount.execute(accountId);
 
-        log.info("Returning find account request");
         return ResponseEntity.ok(AccountConverter.toAccountResponse(accountResponse));
+    }
+
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Request a account", description = "Makes a account creation request.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful Completed account creation",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AccountResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "Bad Request",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExceptionResponse.class))),
+                    @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExceptionResponse.class))),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExceptionResponse.class)))
+            })
+    public ResponseEntity<AccountResponse> postAccount(
+            @RequestBody
+            @Valid final AccountRequest accountRequest){
+
+
+        final var createResponse = createAccount.execute(AccountConverter.toAccountEntity(accountRequest));
+
+
+        return ResponseEntity.ok(AccountConverter.toAccountResponse(createResponse));
+
     }
 }

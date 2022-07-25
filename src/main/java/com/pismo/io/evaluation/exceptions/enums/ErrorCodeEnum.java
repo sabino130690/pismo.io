@@ -10,6 +10,7 @@ public enum ErrorCodeEnum {
 
   TRNS400001,
   TRNS404001,
+  TRNS422001,
   TRNS500001;
 
   public String getMessage(final Locale messageLocale) {

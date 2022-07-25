@@ -4,24 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Arrays;
+
 @Getter
 @AllArgsConstructor
 @ToString
 public enum OperationType {
 
-	OMPRA_A_VISTA(1, "COMPRA_A_VISTA"),
-	COMPRA_PARCELADA(2, "COMPRA_PARCELADA"),
-	SAQUE(3, "SAQUE"),
-	PAGAMENTO(4, "PAGAMENTO");
+	COMPRA_A_VISTA(1L, "COMPRA_A_VISTA"),
+	COMPRA_PARCELADA(2L, "COMPRA_PARCELADA"),
+	SAQUE(3L, "SAQUE"),
+	PAGAMENTO(4L, "PAGAMENTO");
 
-	private Integer code;
+	private Long code;
 	private String detail;
 
-	public static OperationType getByCode(final Integer code) {
-		for (OperationType modality : values()) {
-			if (modality.getCode().equals(code))
-				return modality;
-		}
-		throw new IllegalArgumentException();
+	public static OperationType getByCode(final Long code) {
+		return Arrays.stream(values()).filter(value -> value.getCode().equals(code)).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(String.valueOf(code)));
 	}
 }

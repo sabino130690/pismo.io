@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * Implementation of all connections with database to return Transaction entity
+ * Implementation of all connections with database to return Transaction information
  */
 @Slf4j
 @Service
@@ -27,12 +27,13 @@ public class TransactionDatabaseProvider implements DatabaseProvider<Transaction
 
             return new AccountNotFoundException();
         });
-
+        log.info("Transaction found");
         return transactionData.toEntity();
     }
 
     @Override
     public Transaction save(final Transaction transaction) {
+        log.info("Saving Transaction");
         return transactionRepository.save(TransactionDatabaseConverter.toDatabase(transaction)).toEntity();
     }
 

@@ -1,6 +1,5 @@
 package com.pismo.io.evaluation.gateways.database.model;
 
-import com.pismo.io.evaluation.entities.Account;
 import com.pismo.io.evaluation.entities.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +15,11 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static com.pismo.io.evaluation.exceptions.enums.OperationType.*;
+
+/**
+ * Model representation of Transaction Data.
+ */
 @Entity
 @Table(name = "tb_transaction")
 @Getter
@@ -25,8 +29,8 @@ import java.time.LocalDateTime;
 public class TransactionData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "transaction_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "transaction_id")
     private Long id;
 
     @Column(name = "account_id", nullable = false)
@@ -37,15 +41,15 @@ public class TransactionData {
 
     @Column(name = "operation_amount", nullable = false)
     private BigDecimal amount;
-    @Column(name = "account_document", nullable = false)
-    private LocalDateTime document;
+    @Column(name = "operation_event_datetime", nullable = false)
+    private LocalDateTime operationEventDatetime;
 
 
     public Transaction toEntity() {
         return Transaction.builder()
                 .id(this.id)
-                .document(this.document)
-                .operationId(this.operationId)
+                .eventDatetime(this.operationEventDatetime)
+                .operation(getByCode(this.operationId))
                 .amount(this.amount)
                 .accountId(this.accountId)
                 .build();
