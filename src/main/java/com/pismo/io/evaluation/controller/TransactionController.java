@@ -1,15 +1,11 @@
 package com.pismo.io.evaluation.controller;
 
-import com.pismo.io.evaluation.controller.converter.AccountConverter;
 import com.pismo.io.evaluation.controller.converter.TransactionConverter;
 import com.pismo.io.evaluation.controller.dto.common.ExceptionResponse;
 import com.pismo.io.evaluation.controller.dto.request.TransactionRequest;
 import com.pismo.io.evaluation.controller.dto.response.TransactionResponse;
-import com.pismo.io.evaluation.entities.Transaction;
-import com.pismo.io.evaluation.usecase.CreateTransaction;
-import com.pismo.io.evaluation.usecase.FindAccount;
+import com.pismo.io.evaluation.usecases.CreateTransaction;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,8 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Slf4j
 @Validated

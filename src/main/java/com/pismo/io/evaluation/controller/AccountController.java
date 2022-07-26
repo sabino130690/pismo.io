@@ -1,21 +1,17 @@
 package com.pismo.io.evaluation.controller;
 
 import com.pismo.io.evaluation.controller.converter.AccountConverter;
-import com.pismo.io.evaluation.controller.converter.TransactionConverter;
 import com.pismo.io.evaluation.controller.dto.common.ExceptionResponse;
 import com.pismo.io.evaluation.controller.dto.request.AccountRequest;
-import com.pismo.io.evaluation.controller.dto.request.TransactionRequest;
 import com.pismo.io.evaluation.controller.dto.response.AccountResponse;
-import com.pismo.io.evaluation.controller.dto.response.TransactionResponse;
-import com.pismo.io.evaluation.usecase.CreateAccount;
-import com.pismo.io.evaluation.usecase.FindAccount;
+import com.pismo.io.evaluation.usecases.CreateAccount;
+import com.pismo.io.evaluation.usecases.FindAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

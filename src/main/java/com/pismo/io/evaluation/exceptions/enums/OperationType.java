@@ -6,21 +6,24 @@ import lombok.ToString;
 
 import java.util.Arrays;
 
+/**
+ * Operation type enum
+ */
 @Getter
 @AllArgsConstructor
 @ToString
 public enum OperationType {
 
-	COMPRA_A_VISTA(1L, "COMPRA_A_VISTA"),
-	COMPRA_PARCELADA(2L, "COMPRA_PARCELADA"),
-	SAQUE(3L, "SAQUE"),
-	PAGAMENTO(4L, "PAGAMENTO");
+    COMPRA_A_VISTA(1L, "COMPRA_A_VISTA"),
+    COMPRA_PARCELADA(2L, "COMPRA_PARCELADA"),
+    SAQUE(3L, "SAQUE"),
+    PAGAMENTO(4L, "PAGAMENTO");
 
-	private Long code;
-	private String detail;
+    private Long code;
+    private String detail;
 
-	public static OperationType getByCode(final Long code) {
-		return Arrays.stream(values()).filter(value -> value.getCode().equals(code)).findFirst()
-				.orElseThrow(() -> new IllegalArgumentException(String.valueOf(code)));
-	}
+    public static OperationType getByCode(final Long code) {
+        return Arrays.stream(values()).filter(value -> value.getCode().equals(code)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("O tipo de operação é invalido. Deve ser entre 1 a 4."));
+    }
 }

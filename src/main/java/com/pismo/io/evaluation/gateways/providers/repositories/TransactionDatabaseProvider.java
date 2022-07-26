@@ -1,7 +1,7 @@
 package com.pismo.io.evaluation.gateways.providers.repositories;
 
 import com.pismo.io.evaluation.entities.Transaction;
-import com.pismo.io.evaluation.exceptions.AccountNotFoundException;
+import com.pismo.io.evaluation.exceptions.TransactionNotFoundException;
 import com.pismo.io.evaluation.gateways.database.TransactionRepository;
 import com.pismo.io.evaluation.gateways.database.converter.TransactionDatabaseConverter;
 import com.pismo.io.evaluation.gateways.database.model.TransactionData;
@@ -25,7 +25,7 @@ public class TransactionDatabaseProvider implements DatabaseProvider<Transaction
 
             log.info("Transaction not found");
 
-            return new AccountNotFoundException();
+            return new TransactionNotFoundException();
         });
         log.info("Transaction found");
         return transactionData.toEntity();

@@ -100,6 +100,13 @@ public class CustomExceptionHandler {
         return this.getExceptionResponse(HttpStatus.BAD_REQUEST, request, TRNS400001, fieldErros, true);
     }
 
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<ExceptionResponse> handleIllegalArgumentException(
+            final IllegalArgumentException e, final HttpServletRequest request) {
+
+        return this.getExceptionResponseWithSingleMessage(HttpStatus.BAD_REQUEST, request, TRNS400001, e.getMessage(), true);
+    }
+
     private ResponseEntity<ExceptionResponse> getExceptionResponse(final HttpStatus status,
                                                                    final HttpServletRequest request,
                                                                    final ErrorCodeEnum code,
@@ -115,12 +122,35 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(status).body(response);
     }
 
+    private ResponseEntity<ExceptionResponse> getExceptionResponseWithSingleMessage(final HttpStatus status,
+                                                                                    final HttpServletRequest request,
+                                                                                    final ErrorCodeEnum code,
+                                                                                    final String message,
+                                                                                    final boolean isPrintStack) {
+        final var response = ExceptionResponse.builder()
+                .status(status.value())
+                .printStack(isPrintStack)
+                .error(this.getError(code, message))
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(status).body(response);
+    }
+
     private ExceptionErrorDescriptionResponse getError(final ErrorCodeEnum code,
                                                        final Map<String, List<String>> fields) {
         return ExceptionErrorDescriptionResponse.builder()
                 .code(code)
                 .fields(fields)
                 .message(code.getMessage(Locale.getDefault()))
+                .build();
+    }
+
+    private ExceptionErrorDescriptionResponse getError(final ErrorCodeEnum code,
+                                                       final String message) {
+        return ExceptionErrorDescriptionResponse.builder()
+                .code(code)
+                .message(message)
                 .build();
     }
 

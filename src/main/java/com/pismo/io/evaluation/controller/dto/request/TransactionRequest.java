@@ -4,37 +4,35 @@ import com.pismo.io.evaluation.exceptions.enums.OperationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 /**
  * Model representation of a Transaction request.
  */
-@Data
 @Builder
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class TransactionRequest {
 
-    @Schema(description = "Contem o identificador da conta da transação")
-    @NotNull(message = "Campo account_id obrigatório")
+    @NotNull(message = "{accountid.notnull}")
     private Long account_id;
 
     @Schema(
-            description = "Tipo da operação. Informar o id.",
+            description = "Id da operação",
             type = "enum",
             format = "enum",
             implementation = OperationType.class)
-    @NotNull(message = "Campo operation_type_id obrigatório")
+    @NotNull(message = "{operationtypeid.notnull}")
     private Long operation_type_id;
 
-    @Schema(description = "Contem o valor da transação.")
-    @NotNull(message = "Campo account_id obrigatório")
+    @NotNull(message = "{amount.notnull}")
+    @DecimalMin(value = "0.01", message = "{amount.min}")
     private BigDecimal amount;
 
 }

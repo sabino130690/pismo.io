@@ -5,8 +5,8 @@ import com.pismo.io.evaluation.controller.handler.CustomExceptionHandler;
 import com.pismo.io.evaluation.entities.Account;
 import com.pismo.io.evaluation.exceptions.AccountAlreadyCreatedException;
 import com.pismo.io.evaluation.exceptions.AccountNotFoundException;
-import com.pismo.io.evaluation.usecase.CreateAccount;
-import com.pismo.io.evaluation.usecase.FindAccount;
+import com.pismo.io.evaluation.usecases.CreateAccount;
+import com.pismo.io.evaluation.usecases.FindAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,9 +65,9 @@ public class AccountControllerUnitTest extends AbstractControllerTest {
     @Test
     @DisplayName("Should successfully post account creation.")
     public void testSuccessfulPostAccount() throws Exception {
-        final var request = AccountRequest.builder().document_number("1234567890").build();
+        final var request = AccountRequest.builder().document_number("12345678910").build();
 
-        when(createAccount.execute(any())).thenReturn(Account.builder().document("1234567890").id(1L).build());
+        when(createAccount.execute(any())).thenReturn(Account.builder().document("12345678910").id(1L).build());
 
         this.mockMvc.perform(post("/api/v1/evaluation/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -79,7 +79,7 @@ public class AccountControllerUnitTest extends AbstractControllerTest {
     @Test
     @DisplayName("Should fail post account creation when it already exists.")
     public void testFailPostAccount() throws Exception {
-        final var request = AccountRequest.builder().document_number("1234567890").build();
+        final var request = AccountRequest.builder().document_number("12345678910").build();
 
         when(createAccount.execute(any())).thenThrow(new AccountAlreadyCreatedException());
 
@@ -95,8 +95,6 @@ public class AccountControllerUnitTest extends AbstractControllerTest {
     public void testFailPostAccountWhenDocumentIsNull() throws Exception {
         final var request = AccountRequest.builder().build();
 
-        //when(createAccount.execute(any())).thenThrow(new AccountAlreadyCreatedException());
-
         this.mockMvc.perform(post("/api/v1/evaluation/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -109,7 +107,17 @@ public class AccountControllerUnitTest extends AbstractControllerTest {
     public void testFailPostAccountWhenDocumentIsEmpty() throws Exception {
         final var request = AccountRequest.builder().document_number("").build();
 
-        //when(createAccount.execute(any())).thenThrow(new AccountAlreadyCreatedException());
+        this.mockMvc.perform(post("/api/v1/evaluation/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(mapToJson(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Should fail post account creation when document has invalid format.")
+    public void testFailPostAccountWhenDocumentIsOutOfPattern() throws Exception {
+        final var request = AccountRequest.builder().document_number("zzzzzzzzz").build();
 
         this.mockMvc.perform(post("/api/v1/evaluation/accounts")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package com.pismo.io.evaluation.usecase;
+package com.pismo.io.evaluation.usecases;
 
 import com.pismo.io.evaluation.entities.Transaction;
 import com.pismo.io.evaluation.gateways.providers.repositories.AccountDatabaseProvider;
