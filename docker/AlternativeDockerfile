@@ -1,0 +1,16 @@
+FROM openjdk:11.0.6-jre
+
+ARG PROFILE
+
+#ENV
+ENV PROFILE $PROFILE
+ENV APP_NAME evaluation.jar
+ENV PORT 8080
+
+ADD target/*.jar ${APP_NAME}
+
+#Exposed Port
+EXPOSE ${PORT}
+
+# Start com.pismo.io.evaluation.EvaluationProjectApplication
+ENTRYPOINT java ${JAVA_OPTS} -jar ${APP_NAME}

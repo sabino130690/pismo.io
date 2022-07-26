@@ -1,0 +1,21 @@
+version: '3'
+services:
+
+  evaluation:
+    build:
+      context: ../
+      dockerfile: ${PWD}/AlternativeDockerfile
+    container_name: evaluation
+    ports:
+      - "8080:8080"
+    networks:
+      env:
+        ipv4_address: 174.101.101.101
+
+networks:
+  env:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 174.101.101.0/24
