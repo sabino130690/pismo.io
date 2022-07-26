@@ -31,3 +31,11 @@ Para acesso ao banco de dados, utilizar o endereço http://localhost:8080/h2-con
 JDBC Url: jdbc:h2:mem:pismo
 Usuario: sa
 Senha: password
+
+
+# Parando a aplicação
+
+3. No mesmo diretorio docker e executar o comando abaixo utilizando sudo:
+```
+sudo docker-compose down
+```
