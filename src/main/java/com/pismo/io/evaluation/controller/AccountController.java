@@ -38,7 +38,7 @@ public class AccountController {
 
     @GetMapping("/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Buscar conta", description = "Consulta de conta pelo seu id.",
+    @Operation(summary = "Buscar conta.", description = "Consulta de conta pelo seu id.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Conta encontrada.",
                             content = @Content(mediaType = "application/json",

@@ -35,7 +35,7 @@ public class TransactionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Solicitar transação", description = "Solicita a criação de uma nova transação para uma conta existente.",
+    @Operation(summary = "Solicitar transação.", description = "Solicita a criação de uma nova transação para uma conta existente.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Transação solicitada com sucesso.",
                             content = @Content(mediaType = "application/json",
