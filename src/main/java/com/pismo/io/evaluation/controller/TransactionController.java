@@ -28,16 +28,16 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/evaluation/transactions")
-@Tag(name = "Transaction", description = "Transaction V1")
+@Tag(name = "Transaction", description = "Controller responsavel pelas funcionalidades relacionadas à transações.")
 public class TransactionController {
 
     private final CreateTransaction createTransaction;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Request a transaction", description = "Makes a transaction request.",
+    @Operation(summary = "Solicitar transação", description = "Solicita a criação de uma nova transação para uma conta existente.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful Completed Transfer",
+                    @ApiResponse(responseCode = "200", description = "Transação solicitada com sucesso.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = TransactionResponse.class))),
                     @ApiResponse(responseCode = "400", description = "Bad Request",

@@ -28,7 +28,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(path = "/api/v1/evaluation/accounts")
 @RequiredArgsConstructor
-@Tag(name = "Account", description = "Account V1")
+@Tag(name = "Account", description = "Controller responsavel pelas funcionalidades relacionadas à conta.")
 @Validated
 public class AccountController {
 
@@ -38,9 +38,9 @@ public class AccountController {
 
     @GetMapping("/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Find account", description = "Consultation of account by id.",
+    @Operation(summary = "Buscar conta", description = "Consulta de conta pelo seu id.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful find account",
+                    @ApiResponse(responseCode = "200", description = "Conta encontrada.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = AccountResponse.class))),
                     @ApiResponse(responseCode = "400", description = "Bad Request",
@@ -63,9 +63,9 @@ public class AccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Request a account", description = "Makes a account creation request.",
+    @Operation(summary = "Criar conta.", description = "Solicita a criação de conta a partir de um documento.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful Completed account creation",
+                    @ApiResponse(responseCode = "200", description = "Conta criada com sucesso.",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = AccountResponse.class))),
                     @ApiResponse(responseCode = "400", description = "Bad Request",
