@@ -1,6 +1,8 @@
 package com.pismo.io.evaluation.usecases;
 
+import com.pismo.io.evaluation.entities.Account;
 import com.pismo.io.evaluation.entities.Transaction;
+import com.pismo.io.evaluation.exceptions.TransactionLimitExceededException;
 import com.pismo.io.evaluation.gateways.providers.repositories.AccountDatabaseProvider;
 import com.pismo.io.evaluation.gateways.providers.repositories.TransactionDatabaseProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -29,20 +31,42 @@ public class CreateTransaction {
      */
     public Transaction execute(final Transaction transaction) {
         log.info("Verificando existencia da conta.");
-        accountDatabaseProvider.findById(transaction.getAccountId());
+        final var account = accountDatabaseProvider.findById(transaction.getAccountId());
 
         log.info("Salvando transação.");
-        return transactionDatabaseProvider.save(buildCashOutAmount(transaction));
+        return transactionDatabaseProvider.save(buildCashOutAmount(account, transaction));
     }
 
-    private Transaction buildCashOutAmount(final Transaction transaction) {
-        if (PAGAMENTO.equals(transaction.getOperation())) {
+
+
+    private Transaction buildCashOutAmount(final Account account, final Transaction transaction) {
+        if (!PAGAMENTO.equals(transaction.getOperation())) {
+            log.info("Verificando limite");
+            verifyAvalilableLimit(account, transaction);
+
+            log.info("Atualizando limite");
+            final var limitToUpdate = account.getLimit();
+            account.toBuilder().limit(limitToUpdate.subtract(transaction.getAmount()));
+            accountDatabaseProvider.save(account);
+
             log.info("Fluxo de cash-out");
             final var negateAmount = transaction.getAmount().negate();
             return transaction.toBuilder().amount(negateAmount).build();
         }
+
+        log.info("Atualizando limite");
+        final var limitToUpdate = account.getLimit();
+        account.toBuilder().limit(limitToUpdate.add(transaction.getAmount()));
+        accountDatabaseProvider.save(account);
+
         log.info("Fluxo de cash-in");
         return transaction;
+    }
+
+    private void verifyAvalilableLimit(final Account account, final Transaction transaction){
+        if (transaction.getAmount().compareTo(account.getLimit()) > 0){
+            throw new TransactionLimitExceededException();
+        }
     }
 
 }

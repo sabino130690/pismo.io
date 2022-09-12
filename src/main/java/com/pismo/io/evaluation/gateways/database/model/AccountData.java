@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  * Model representation of Account Data.
@@ -32,11 +33,14 @@ public class AccountData {
     @Column(name = "account_document", nullable = false)
     private String document;
 
+    @Column(name = "account_amount_limit", nullable = false)
+    private BigDecimal avalilableLimit;
 
     public Account toEntity() {
         return Account.builder()
                 .id(this.id)
                 .document(this.document)
+                .limit(this.avalilableLimit)
                 .build();
     }
 }

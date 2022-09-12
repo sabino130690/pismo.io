@@ -19,6 +19,7 @@ public class AccountDatabaseConverter {
     public static AccountData toDatabase(final Account account) {
         return AccountData.builder()
                 .document(account.getDocument())
+                .avalilableLimit(account.getLimit())
                 .build();
     }
 }

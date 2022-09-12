@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 /**
  * Use case responsible to Account creation operations.
  */
@@ -28,10 +30,16 @@ public class CreateAccount {
             repository.findByDocument(account.getDocument());
         }catch (AccountNotFoundException anfe){
             log.info("Conta não encontrada, criando conta");
-            return repository.save(account);
+
+            return repository.save(initializeLimit(account));
         }
         log.error("Conta ja existe");
         throw new AccountAlreadyCreatedException();
 
+    }
+
+    private Account initializeLimit(final Account account){
+        log.info("Adicionando limite zero a conta a ser criada.");
+        return account.toBuilder().limit(BigDecimal.ZERO).build();
     }
 }

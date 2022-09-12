@@ -17,7 +17,7 @@ public class TransactionFixture {
                 .build();
     }
 
-    public static final Transaction buildTransactionCashOut() {
+    public static final Transaction buildTransactionCashIn() {
         return Transaction.builder()
                 .amount(new BigDecimal("12.00"))
                 .accountId(1L)

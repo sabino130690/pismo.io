@@ -11,6 +11,8 @@ public enum ErrorCodeEnum {
   TRNS400001,
   TRNS404001,
   TRNS404002,
+
+  TRNS412001,
   TRNS422001,
   TRNS500001;
 

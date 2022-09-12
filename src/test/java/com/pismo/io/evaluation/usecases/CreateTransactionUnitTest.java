@@ -11,8 +11,9 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.pismo.io.evaluation.controller.entities.fixture.AccountFixture.buildAccount;
+import static com.pismo.io.evaluation.controller.entities.fixture.AccountFixture.buildAccountWithLimit;
 import static com.pismo.io.evaluation.controller.entities.fixture.TransactionFixture.buildTransaction;
-import static com.pismo.io.evaluation.controller.entities.fixture.TransactionFixture.buildTransactionCashOut;
+import static com.pismo.io.evaluation.controller.entities.fixture.TransactionFixture.buildTransactionCashIn;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,7 +49,7 @@ public class CreateTransactionUnitTest {
     @Test
     @DisplayName("Should successfully create transaction")
     void testCreateTransactionSuccessfully() {
-        final var account = buildAccount();
+        final var account = buildAccountWithLimit();
         final var transaction = buildTransaction();
 
         when(accountDatabaseProvider.findById(any())).thenReturn(account);
@@ -64,7 +65,7 @@ public class CreateTransactionUnitTest {
     @DisplayName("Should successfully create transaction with CashOut OperationType")
     void testCreateTransactionSuccessfullyWithCashOutAmount() {
         final var account = buildAccount();
-        final var transaction = buildTransactionCashOut();
+        final var transaction = buildTransactionCashIn();
 
         when(accountDatabaseProvider.findById(any())).thenReturn(account);
         when(transactionDatabaseProvider.save(any())).thenReturn(transaction);

@@ -4,6 +4,7 @@ DROP ALL OBJECTS;
 CREATE TABLE tb_account (
     account_id   INTEGER      NOT NULL AUTO_INCREMENT,
     account_document VARCHAR(14) NOT NULL,
+    account_amount_limit      NUMBER(9, 2)    NOT NULL,
     CONSTRAINT pk_account PRIMARY KEY (account_id)
 );
 
